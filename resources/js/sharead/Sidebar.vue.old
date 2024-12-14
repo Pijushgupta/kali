@@ -1,0 +1,66 @@
+<script setup>
+import TreeItem from './TreeItem.vue';
+
+const navItems = [
+  {
+    id: 1,
+    name: "Posts",
+    type: "post",
+    child: [
+      {
+        id: 3,
+        name: "All Posts",
+        type: "post",
+        link: "/dashboard/posts?type=post",
+      },
+      {
+        id: 4,
+        name: "Add New Post",
+        type: "post",
+      },
+      {
+        id: 5,
+        name: "Categories",
+        type: "post",
+      },
+    ],
+  },
+  {
+    id: 2,
+    name: "Pages",
+    type: "page",
+    child: [
+      {
+        id: 6,
+        name: "All Pages",
+        type: "page",
+        child: [
+          {
+            id: 8,
+            name: "abc",
+            type: "abc",
+          },
+          {
+            id: 9,
+            name: "cde",
+            type: "cde",
+          },
+        ],
+      },
+      {
+        id: 7,
+        name: "Add New Page",
+        type: "page",
+      },
+    ],
+  },
+];
+</script>
+
+<template>
+  
+    <ul>
+      <TreeItem v-for="navItem in navItems" :key="navItem.id" :item="navItem" />
+    </ul>
+
+</template>
