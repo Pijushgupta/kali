@@ -8,7 +8,7 @@ import Sidebar from '../sharead/Sidebar.vue';
         <div class="md:px-5  md:w-[300px] h-full  sidebar overflow-y-scroll">
             <Sidebar/>
         </div>
-        <div class="px-5  w-full h-full  pt-20">
+        <div class="px-5  w-full h-full  pt-20 relative">
             <slot/>
         </div>
     </div>

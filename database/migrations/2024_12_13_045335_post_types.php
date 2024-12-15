@@ -11,11 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
         Schema::create('post_types',function(Blueprint $table){
             $table->id();
-            $table->string('post_type',255)->unique();
-            $table->longText('value');
+            $table->unsignedBigInteger('parent');
+            $table->string('label','256')->nullable();
+            $table->string('name',256);
+            $table->boolean('is_hidden')->default(false);
+            $table->json('taxonomy')->nullable();
+            $table->json('support')->nullable();
+            $table->boolean('hierarchical')->default(false);
+            $table->longText('menu_icon')->nullable();
+            $table->string('slug',256)->unique()->nullable();
         });
     }
 
@@ -24,7 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
         Schema::dropIfExists('post_types');
     }
 };

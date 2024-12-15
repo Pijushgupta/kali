@@ -35,7 +35,8 @@ class PostController extends Controller
     }
 
     public function post_type(){
-        return Inertia::render('PostType');
+        $data = Post::where('post_type','post_type')->get();
+        return Inertia::render('PostType',['post_types'=>$data]);
     }
 
     public function getMenu(){
@@ -138,5 +139,8 @@ class PostController extends Controller
         return  $menuItem;
     }
 
-    
+    public function getPostTypes(){
+       
+
+    }
 }
