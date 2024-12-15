@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class PostType extends Model
 {
     //
-    private $table = 'post_types';
+    protected $table = 'post_types';
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Dashboard\PostController as DashboardPostController;
+use App\Http\Controllers\Dashboard\PostType as DashboardPostTypeController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -47,7 +48,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard/edit',[DashboardPostController::class,'edit']);
 
-    Route::get('/dashboard/posttypes',[DashboardPostController::class,'post_type']);
+    Route::get('/dashboard/posttype',[DashboardPostTypeController::class,'getAll']);
+
+    Route::get('/dashboard/posttype/edit',[DashboardPostTypeController::class,'edit']);
 
 });
 
