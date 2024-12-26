@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('post_types',function(Blueprint $table){
             $table->id();
-            $table->unsignedBigInteger('parent');
             $table->string('label','256')->nullable();
-            $table->string('name',256);
+            $table->string('name',256);      
             $table->boolean('is_hidden')->default(false);
             $table->json('taxonomy')->nullable();
             $table->json('support')->nullable();

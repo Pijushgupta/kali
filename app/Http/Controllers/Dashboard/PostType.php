@@ -20,9 +20,12 @@ class PostType extends Controller
 
     public function edit(Request $request){
         
+        //this is for new post type 
         if(!$request->query('id')){
             return Inertia::render('PostTypeEdit');
         }
+
+        //write the logic for getting the data for existing post type and return 
 
     }
 }
