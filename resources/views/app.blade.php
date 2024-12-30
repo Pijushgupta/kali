@@ -11,7 +11,7 @@
         @endif
         @inertiaHead
     </head>
-    <body class="antialiased dashboard">
+    <body class="antialiased dashboard relative">
     @inertia
 <script>
 
