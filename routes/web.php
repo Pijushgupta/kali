@@ -52,6 +52,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard/posttype/edit',[DashboardPostTypeController::class,'edit']);
 
+    Route::post('/dashboard/posttype/save',[DashboardPostTypeController::class,'save'])->name('posttype.save');
 });
 
 

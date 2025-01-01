@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('post_types',function(Blueprint $table){
             $table->id();
-            $table->string('label','256')->nullable();
+            $table->string('label',256)->nullable();
             $table->string('name',256);      
             $table->boolean('is_hidden')->default(false);
             $table->json('taxonomy')->nullable();
@@ -21,6 +21,7 @@ return new class extends Migration
             $table->boolean('hierarchical')->default(false);
             $table->longText('menu_icon')->nullable();
             $table->string('slug',256)->unique()->nullable();
+            $table->timestamps();
         });
     }
 

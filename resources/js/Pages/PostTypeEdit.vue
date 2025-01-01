@@ -1,5 +1,6 @@
 <script setup>
 import { reactive, ref, computed } from 'vue';
+import { router } from '@inertiajs/vue3';
 import Multiselect from 'vue-multiselect'
 import Icon from '@/icons/Icon.vue';
 import IconsModal from '@/icons/IconsModal.vue';
@@ -12,23 +13,23 @@ const props = defineProps({
 const data = reactive({
     label: props.postType?.label || null,
     name: props.postType?.name || null,
-    is_hidden: props.postType?.is_hidden || null,
+    is_hidden: props.postType?.is_hidden || false,
     taxonomy: props.postType?.taxonomy || null,
     support: props.postType?.support || null,
-    hierarchical: props.postType?.hierarchical || null,
+    hierarchical: props.postType?.hierarchical || false,
     menu_icon: props.postType?.menu_icon || null,
     slug: props.postType?.slug || null,
 
 });
 
-const taxonomyList = ['list', 'of', 'options'];
+const taxonomyList = ['list', 'of', 'options','pijush','gupta'];
 const taxonomySelected = ref(null);
 
 const supportList = ['editor', 'feature-image',]
 const supportSelected = ref(null);
 
 const submit = () => {
-    console.log('submit');
+    router.post('/dashboard/posttype/save',data);
 }
 
 
@@ -41,11 +42,11 @@ const resolvedIcon = computed(() => data?.menu_icon || 'IconIcons')
     <div class="max-w-5xl mx-auto ">
         
         <!-- icons modal -->
-        <!-- two way binding using emit and v-modal, since v-modal alone can do child-parent two way binding so i used emit-->
+        <!-- two way binding using emit and v-modal, since v-modal alone can't do child-parent two way binding so i used emit-->
         <IconsModal v-if="open" v-model:selectedIcon="data.menu_icon" v-model:isOpen="open" />
         <!-- icons modal ends -->
 
-        <form @prevent.default>
+        <form @submit.prevent="submit">
             <div class="grid gap-6 grid-cols-2">
                 <div class="relative">
                     <div class="absolute left-2.5 top-2.5 pr-2.5 ">
@@ -59,7 +60,7 @@ const resolvedIcon = computed(() => data?.menu_icon || 'IconIcons')
                     </div>
                     <input type="text"
                         class="w-full text-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-400 dark:focus:border-blue-400 "
-                        placeholder="Label">
+                        placeholder="Label" v-model="data.label">
                 </div>
                 <div class="relative">
                     <div class="absolute left-2.5 top-2.5 pr-2.5 flex justify-center ">
@@ -76,14 +77,14 @@ const resolvedIcon = computed(() => data?.menu_icon || 'IconIcons')
                     </div>
                     <input type="text"
                         class="w-full text-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-400 dark:focus:border-blue-400"
-                        placeholder="Name">
+                        placeholder="Name" v-model="data.name">
                 </div>
                 <div class="relative ">
 
                     <label
                         class="flex justify-between items-center cursor-pointer border rounded-lg p-2.5 bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
                         <span class="me-3 text-sm font-medium text-gray-900 dark:text-gray-300">Show in Menu</span>
-                        <input type="checkbox" value="" class="sr-only peer">
+                        <input type="checkbox" v-model="data.is_hidden" class="sr-only peer">
                         <div
                             class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
                         </div>
@@ -105,7 +106,7 @@ const resolvedIcon = computed(() => data?.menu_icon || 'IconIcons')
                             <path d="M12 7l0 6" />
                         </svg>
                     </div>
-                    <multiselect v-model="taxonomySelected" :options="taxonomyList" :searchable="false" :multiple="true"
+                    <multiselect v-model="data.taxonomy" :options="taxonomyList" :searchable="false" :multiple="true"
                         :hide-selected="true" placeholder="Select taxonomy"
                         class="w-full bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full   dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-400 dark:focus:border-blue-400 text-sm ps-10 p-2.5">
                     </multiselect>
@@ -123,7 +124,7 @@ const resolvedIcon = computed(() => data?.menu_icon || 'IconIcons')
                                 d="M3 14h12a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h3a2 2 0 0 1 2 2v12" />
                         </svg>
                     </div>
-                    <multiselect v-model="supportSelected" :options="supportList" :searchable="false" :multiple="true"
+                    <multiselect v-model="data.support" :options="supportList" :searchable="false" :multiple="true"
                         :hide-selected="true" placeholder="Select taxonomy"
                         class="w-full bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-400 focus:border-blue-400 block  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-400 dark:focus:border-blue-400 text-sm ps-10 p-2.5">
                     </multiselect>
@@ -133,7 +134,7 @@ const resolvedIcon = computed(() => data?.menu_icon || 'IconIcons')
                     <label
                         class="flex justify-between items-center cursor-pointer border rounded-lg p-2.5 bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
                         <span class="me-3 text-sm font-medium text-gray-900 dark:text-gray-300">Hierarchical</span>
-                        <input type="checkbox" value="" class="sr-only peer">
+                        <input type="checkbox" v-model="data.hierarchical" class="sr-only peer">
                         <div
                             class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
                         </div>
@@ -143,14 +144,36 @@ const resolvedIcon = computed(() => data?.menu_icon || 'IconIcons')
                 </div>
                 <div class="relative">
                     <label
-                        class="flex justify-between items-center cursor-pointer border rounded-lg p-2.5 bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                        class="flex justify-between items-center cursor-pointer border rounded-lg p-2.5 py-[.4rem] bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
                         <span class="me-3 text-sm font-medium text-gray-900 dark:text-gray-300">Menu Icon</span>
                         <div class="shadow dark:shadow-gray-800 p-0.5 rounded" @click="open = true">
-                            <Icon :icon-name="resolvedIcon" />
+                            <Icon :iconName="resolvedIcon" />
                         </div>
                     </label>
                 </div>
+                <div class="relative">
+                    <div class="absolute left-2.5 top-2.5 pr-2.5 ">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="icon icon-tabler icons-tabler-outline icon-tabler-chevrons-right size-6 stroke-gray-400">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M7 7l5 5l-5 5" />
+                            <path d="M13 7l5 5l-5 5" />
+                        </svg>
+                    </div>
+                    <input type="text"
+                        class="w-full text-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-400 dark:focus:border-blue-400 "
+                        placeholder="Slug" v-model="data.slug">
+                </div>
+                
             </div>
+            <div class="flex justify-end mt-4">
+                    
+                    <button  type="submit" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5  mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 flex justify-center items-center">
+                        <Icon iconName="IconDeviceFloppy" class="h-5 w-5 mr-2 " />
+                        Save
+                    </button>
+                </div>
         </form>
     </div>
 </template>
@@ -185,14 +208,5 @@ const resolvedIcon = computed(() => data?.menu_icon || 'IconIcons')
     font-size: 14px;
 }
 
-.modal {
-    position: fixed;
-    z-index: 999;
-    top: 20%;
-    left: 50%;
-    width: 600px;
-    margin-left: -300px;
-    height: 400px;
 
-}
 </style>

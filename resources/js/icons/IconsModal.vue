@@ -33,10 +33,11 @@ const currentPageDecrement = () => {
     if (currentPage.value == 1) return false;
     currentPage.value--;
 }
-
+// for two way binding we have to 'update:' prefix to props 
 const emit = defineEmits(['update:selectedIcon', 'update:isOpen']);
+
 const selectIcon = (index) => {
-    //selecting the icons
+    //selecting the icon and emitting back 
     emit('update:selectedIcon', index);
     //closing the modal
     updateOpenState();
