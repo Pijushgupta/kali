@@ -48,9 +48,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard/edit',[DashboardPostController::class,'edit']);
 
-    Route::get('/dashboard/posttype',[DashboardPostTypeController::class,'getAll']);
-
-    Route::get('/dashboard/posttype/edit',[DashboardPostTypeController::class,'edit']);
+    Route::get('/dashboard/posttype',[DashboardPostTypeController::class,'getAll'])->name('getposttypes');
+    Route::get('/dashboard/posttype/edit/{id?}',[DashboardPostTypeController::class,'edit']);
+    Route::get('/dashboard/posttype/delete/{id}',[DashboardPostTypeController::class,'delete']);
 
     Route::post('/dashboard/posttype/save',[DashboardPostTypeController::class,'save'])->name('posttype.save');
 });

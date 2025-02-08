@@ -1,46 +1,90 @@
 <script setup>
-import { reactive, ref, computed } from 'vue';
+import { reactive, ref, computed, watch } from 'vue';
 import { router } from '@inertiajs/vue3';
 import Multiselect from 'vue-multiselect'
 import Icon from '@/icons/Icon.vue';
 import IconsModal from '@/icons/IconsModal.vue';
+import {useToast} from '@/toast/useToast';
 
 
+/**
+ * arguments aka props
+ */
 const props = defineProps({
-    postType: Object
+    postType: Object,
+    errors: Object,
+    flash:Object
 });
 
 const data = reactive({
+    id: props.postType?.id || null,
     label: props.postType?.label || null,
     name: props.postType?.name || null,
-    is_hidden: props.postType?.is_hidden || false,
+    is_hidden: props.postType?.is_hidden == 1? true:false || false,
     taxonomy: props.postType?.taxonomy || null,
     support: props.postType?.support || null,
-    hierarchical: props.postType?.hierarchical || false,
+    hierarchical: props.postType?.hierarchical== 1? true:false || false,
     menu_icon: props.postType?.menu_icon || null,
     slug: props.postType?.slug || null,
 
 });
 
-const taxonomyList = ['list', 'of', 'options','pijush','gupta'];
-const taxonomySelected = ref(null);
-
+/**
+ * TODO:get taxonomy and support  list form database
+ */
+const taxonomyList = ['list', 'of', 'options', 'pijush', 'gupta'];
 const supportList = ['editor', 'feature-image',]
-const supportSelected = ref(null);
 
+/**
+ * submitting the data 
+ */
 const submit = () => {
-    router.post('/dashboard/posttype/save',data);
+    router.post('/dashboard/posttype/save', data);
 }
-
-
+/**
+ * for icon modal
+ */
 const open = ref(false);
 
 const resolvedIcon = computed(() => data?.menu_icon || 'IconIcons')
+
+/**
+ * toasts
+ */
+const errors = ref([])
+watch(()=>props.errors,(newErrors)=>{
+    if(newErrors){
+        errors.value = Object.entries(newErrors).map((error)=> error);
+    }else{
+        errors.value = [];
+    }
+},{ immediate: true, deep: true })
+
+const {addToast} = useToast();
+watch(()=>props.flash,(newFlash)=>{
+    //info toast 
+    if(newFlash){
+        // flash.value = Object.entries(newFlash).map((f)=>f);
+        addToast({
+        type: "info",
+        location: "bottom-right",
+        content: newFlash.status,
+        icon: "IconInfoSquareRounded",
+        iconSr: "Information",
+        });
+    }else{
+        flash.value = [];
+    }
+});
 </script>
 <template>
-
+    
     <div class="max-w-5xl mx-auto ">
         
+        
+
+        
+
         <!-- icons modal -->
         <!-- two way binding using emit and v-modal, since v-modal alone can't do child-parent two way binding so i used emit-->
         <IconsModal v-if="open" v-model:selectedIcon="data.menu_icon" v-model:isOpen="open" />
@@ -88,9 +132,7 @@ const resolvedIcon = computed(() => data?.menu_icon || 'IconIcons')
                         <div
                             class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
                         </div>
-
                     </label>
-
                 </div>
                 <div class="relative">
                     <div class="absolute left-2.5 top-2.5 pr-2.5 flex justify-center ">
@@ -165,19 +207,22 @@ const resolvedIcon = computed(() => data?.menu_icon || 'IconIcons')
                         class="w-full text-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-400 dark:focus:border-blue-400 "
                         placeholder="Slug" v-model="data.slug">
                 </div>
-                
+
             </div>
+
             <div class="flex justify-end mt-4">
-                    
-                    <button  type="submit" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5  mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 flex justify-center items-center">
-                        <Icon iconName="IconDeviceFloppy" class="h-5 w-5 mr-2 " />
-                        Save
-                    </button>
-                </div>
+
+                <button type="submit"
+                    class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5  mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 flex justify-center items-center">
+                    <Icon iconName="IconDeviceFloppy" class="h-5 w-5 mr-2 " />
+                    Save
+                </button>
+            </div>
         </form>
     </div>
 </template>
-<!-- <style src="vue-multiselect/dist/vue-multiselect.min.css"></style> -->
+
+<!-- TODO:move the styles to main css -->
 <style>
 .multiselect__tags-wrap {}
 
@@ -207,6 +252,4 @@ const resolvedIcon = computed(() => data?.menu_icon || 'IconIcons')
     color: #000000;
     font-size: 14px;
 }
-
-
 </style>

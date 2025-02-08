@@ -2,6 +2,7 @@ import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import DashboardLayout from './layout/Dashboardlayout.vue';
 
+
 createInertiaApp({
   resolve: name => {
     const pages = import.meta.glob('./Pages/**/*.vue', { eager: true });
@@ -10,9 +11,9 @@ createInertiaApp({
     return page;
   },
   setup({ el, App, props, plugin }) {
-    createApp({ render: () => h(App, props) })
-      .use(plugin)
-      .mount(el);
+    const app = createApp({ render: () => h(App, props) });
+    app.use(plugin); 
+    app.mount(el);
   },
 });
 
