@@ -7,7 +7,7 @@
         <link href="https://fonts.bunny.net/css?family=ibm-plex-sans:100,400,500,600,700" rel="stylesheet" />
         <!-- Styles / Scripts -->
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-            @vite(['resources/css/app.css', 'resources/js/vue.js', 'node_modules/flowbite/dist/flowbite.js'])
+            @vite(['resources/css/app.css',  'resources/js/vue.js', 'node_modules/flowbite/dist/flowbite.js'])
         @endif
         @inertiaHead
     </head>

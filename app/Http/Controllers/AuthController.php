@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,27 +12,28 @@ class AuthController extends Controller
      * for admin login form
      * @return \Illuminate\Contracts\view\view
      */
-    public function showLogin(): \Illuminate\Contracts\View\View
+    public function showLogin()
     {
-        return view("login");
+       // return view("login");
+       return Inertia::render('Login');
     }
 
     //for post submitLogin
     public function submitLogin(Request $request)
     {
         $credentials = $request->validate([
-            "email" => "required|email",
-            "password" => "required",
+            "loginEmail" => "required|email",
+            "loginPassword" => "required",
         ]);
-
+        $credentials = ["email"=> $credentials["loginEmail"],"password"=>$credentials["loginPassword"]];
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->intended("dashboard");
         }
 
         return back()->withErrors([
-            "email" => "The provided email do not match our records.",
-            "password" => "Wrong password",
+            "loginEmail" => "The provided email do not match our records.",
+            "loginPassword" => "Wrong password",
         ]);
     }
 

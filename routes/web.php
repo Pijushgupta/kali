@@ -26,19 +26,6 @@ Route::get("/logout", [AuthController::class, "logout"]);
 
 //inertia js routes - Protected 
 Route::middleware(['auth', 'verified'])->group(function () {
-    /**
-     * sidebar Menu
-     */
-    $sidebarMenuItemsObj = new DashboardPostController;
-    $sidebarMenuItems = $sidebarMenuItemsObj->getMenu();
-    Inertia::share([
-        'sidebarMenuItems' => $sidebarMenuItems
-        
-    ]);
-    /**
-     * sidebar menu ends 
-     */
-
      
     Route::get('/dashboard',function(){
         return Inertia::render('Dashboard');

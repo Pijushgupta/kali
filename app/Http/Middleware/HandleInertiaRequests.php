@@ -4,7 +4,10 @@ namespace App\Http\Middleware;
 
 use Inertia\Middleware;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\Dashboard\LayoutController;
+
 
 class HandleInertiaRequests extends Middleware
 {
@@ -36,11 +39,15 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        return array_merge(parent::share($request), [
-            //
-            'flash' => [
-                'status' => Session::get('status')
-            ],
-        ]);
+        $sharedData = [
+            'flash' => ['status'=>Session::get('status')]
+        ];
+        
+        if(Auth::check()){
+            $layoutObject = new LayoutController();
+            $sharedData = array_merge($sharedData,$layoutObject->getSharedData());
+        }
+
+        return array_merge(parent::share($request),$sharedData);
     }
 }
